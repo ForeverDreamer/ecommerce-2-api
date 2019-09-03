@@ -14,6 +14,25 @@ class VariationSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='product_detail_api')
+    variation_set = VariationSerializer(many=True, read_only=True)
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = [
+            "url",
+            "id",
+            "title",
+            "image",
+            "variation_set",
+        ]
+
+    def get_image(self, obj):
+        return obj.productimage_set.first().image.url
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
     variation_set = VariationSerializer(many=True, read_only=True)
     image = serializers.SerializerMethodField()
 
@@ -22,6 +41,8 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "title",
+            "description",
+            "price",
             "image",
             "variation_set",
         ]
