@@ -7,17 +7,17 @@ from django.views.generic.list import ListView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
-from django_filters import FilterSet, CharFilter, NumberFilter
-
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.authentication import SessionAuthentication
+from rest_framework import filters
 
 from .forms import VariationInventoryFormSet, ProductFilterForm
 from .mixins import StaffRequiredMixin
 from .models import Product, Variation, Category
 from .serializers import CategorySerializer, ProductSerializer, ProductDetailSerializer
 from .pagination import ProductPagination, CategoryPagination
+from .filters import ProductFilter
 
 
 # API CBVS
@@ -38,6 +38,14 @@ class ProductListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = [
+        filters.SearchFilter,
+        filters.OrderingFilter,
+        filters.DjangoFilterBackend
+    ]
+    search_fields = ["title", "description"]
+    ordering_fields = ["title", "id"]
+    filter_class = ProductFilter
     # pagination_class = ProductPagination
 
 
@@ -97,24 +105,6 @@ class VariationListView(StaffRequiredMixin, ListView):
             messages.success(request, "Your inventory and pricing has been updated.")
             return redirect("products")
         raise Http404
-
-
-class ProductFilter(FilterSet):
-    title = CharFilter(name='title', lookup_type='icontains', distinct=True)
-    category = CharFilter(name='categories__title', lookup_type='icontains', distinct=True)
-    category_id = CharFilter(name='categories__id', lookup_type='icontains', distinct=True)
-    min_price = NumberFilter(name='variation__price', lookup_type='gte', distinct=True)  # (some_price__gte=somequery)
-    max_price = NumberFilter(name='variation__price', lookup_type='lte', distinct=True)
-
-    class Meta:
-        model = Product
-        fields = [
-            'min_price',
-            'max_price',
-            'category',
-            'title',
-            'description',
-        ]
 
 
 def product_list(request):

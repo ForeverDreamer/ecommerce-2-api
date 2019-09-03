@@ -2,8 +2,8 @@ from rest_framework.pagination import LimitOffsetPagination, PageNumberPaginatio
 
 
 class ProductPagination(LimitOffsetPagination):
-    default_limit = 2
-    max_limit = 5
+    default_limit = 5
+    max_limit = 10
     limit_query_param = "limit"
     offset_query_param = "offset"
 

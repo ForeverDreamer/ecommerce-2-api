@@ -156,4 +156,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'products.pagination.ProductPagination',
+    "SEARCH_PARAM": "q"
 }
