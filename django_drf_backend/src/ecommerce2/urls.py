@@ -5,10 +5,11 @@ from django.contrib import admin
 
 from carts.views import CartView, ItemCountView, CheckoutView, CheckoutFinalView
 from orders.views import (
-                    AddressSelectFormView, 
-                    UserAddressCreateView, 
-                    OrderList, 
-                    OrderDetail)
+    AddressSelectFormView,
+    UserAddressCreateView,
+    OrderList,
+    OrderDetail)
+from products.views import CategoryListAPIView
 
 urlpatterns = [
     # Examples:
@@ -32,6 +33,11 @@ urlpatterns = [
 
 ]
 
+# API Patterns
+urlpatterns += [
+    url(r'^api/categories/$', CategoryListAPIView.as_view(), name='categories_api'),
+]
+
 if settings.DEBUG:
-	urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
