@@ -10,6 +10,7 @@ from django.utils import timezone
 from django_filters import FilterSet, CharFilter, NumberFilter
 
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .forms import VariationInventoryFormSet, ProductFilterForm
 from .mixins import StaffRequiredMixin
@@ -24,6 +25,7 @@ class CategoryListAPIView(generics.ListAPIView):
 
 
 class CategoryRetrieveAPIView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
