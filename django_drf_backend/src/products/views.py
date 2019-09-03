@@ -17,12 +17,14 @@ from .forms import VariationInventoryFormSet, ProductFilterForm
 from .mixins import StaffRequiredMixin
 from .models import Product, Variation, Category
 from .serializers import CategorySerializer, ProductSerializer, ProductDetailSerializer
+from .pagination import ProductPagination, CategoryPagination
 
 
 # API CBVS
 class CategoryListAPIView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    pagination_class = CategoryPagination
 
 
 class CategoryRetrieveAPIView(generics.RetrieveAPIView):
@@ -36,6 +38,7 @@ class ProductListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    # pagination_class = ProductPagination
 
 
 class ProductRetrieveAPIView(generics.RetrieveAPIView):
