@@ -23,6 +23,11 @@ class CategoryListAPIView(generics.ListAPIView):
     serializer_class = CategorySerializer
 
 
+class CategoryRetrieveAPIView(generics.RetrieveAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
 # CBVS
 class CategoryListView(ListView):
     model = Category
